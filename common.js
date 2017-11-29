@@ -6,9 +6,9 @@
  * var mod = require('common');
  * mod.thing == 'a thing'; // true
  */
-const minHarvesters = 1;
+const minHarvesters = 0;
 const minContainerHarvesters = 1;
-const minUpgraders = 2;
+const minUpgraders = 1;
 const minBuilders = 1;
 
 // All possible types of harvesters

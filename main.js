@@ -13,7 +13,7 @@ var common = require('common');
 module.exports.loop = function () {
 
     // Automatically spawns at least 1 screep for roles 'harvester' and 'upgrader'
-    // common.spawnCreeps();
+    common.spawnCreeps();
                
     for (var name in Game.creeps) {
         
