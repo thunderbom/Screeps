@@ -9,7 +9,7 @@
 const minHarvesters = 1;
 const minContainerHarvesters = 0;
 const minUpgraders = 1;
-const minBuilders = 1;
+const minBuilders = 2;
 
 // All possible types of harvesters
 const creepHarvester = [

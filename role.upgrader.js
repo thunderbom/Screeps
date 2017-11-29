@@ -1,5 +1,4 @@
-﻿
-var common = require('common');
+﻿var common = require('common');
 
 var roleUpgrader = {
 
