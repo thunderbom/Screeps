@@ -14,17 +14,17 @@ var roleBuilder = {
 
 	    if(creep.memory.building && creep.carry.energy == 0) {
             creep.memory.building = false;
-            creep.say('🔄 harvest');
+            creep.say('harvest');
 	    }
 	    if(!creep.memory.building && creep.carry.energy == creep.carryCapacity) {
 	        creep.memory.building = true;
-	        creep.say('🚧 build');
+	        creep.say('build');
 	    }
 
 	    if(creep.memory.building) {
 	        var buildTargets = creep.room.find(FIND_CONSTRUCTION_SITES);
             if (buildTargets.length) {
-                // Сюда добавляем поиск наиболее построееного сайта, ч��обы в первую очеред�� достраивать его
+                // Searching for the most completed site to finish it in the first time
                 var completestSiteNumber = 0;
                 var completestSiteProgress = buildTargets[completestSiteNumber].progress;
                 for (var site in buildTargets)

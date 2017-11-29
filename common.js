@@ -6,8 +6,8 @@
  * var mod = require('common');
  * mod.thing == 'a thing'; // true
  */
-const minHarvesters = 0;
-const minContainerHarvesters = 1;
+const minHarvesters = 1;
+const minContainerHarvesters = 0;
 const minUpgraders = 1;
 const minBuilders = 1;
 
@@ -133,7 +133,7 @@ module.exports.gatherEnergy = function (creep) {
         // If there are no containers found or container contains too few energy, then looking for sources
         if (sources.length<1 || sources[0].store[RESOURCE_ENERGY] < creep.energyCapacityAvailable)
         {
-            creep.room.find(FIND_SOURCES);
+            sources = creep.room.find(FIND_SOURCES);
             if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(sources[0], { visualizePathStyle: { stroke: '#ffaa00' } });
             }

@@ -1,11 +1,4 @@
-﻿/*
-
- */
-
-// module.exports = {
-// };
-
-
+﻿
 var common = require('common');
 
 var roleUpgrader = {
