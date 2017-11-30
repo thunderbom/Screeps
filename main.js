@@ -3,14 +3,26 @@
 // Game.spawns['Spawn1'].spawnCreep([WORK, WORK, WORK, WORK, WORK, MOVE], 'HarvesterContainer1', { memory: { role: 'harvesterContainer' } });
 // Game.spawns['Spawn1'].spawnCreep([WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE], 'Upgrader3', { memory: { role: 'upgrader' } } );
 
+// Checking game memory and if it's empty, initializing it
+if (!Memory.vars) {
+    Memory.vars = {};
+    Memory.vars.minHarvesters = 1;
+    Memory.vars.minContainerHarvesters = 1;
+    Memory.vars.minUpgraders = 1;
+    Memory.vars.minBuilders = 2;
+}
 
 var roleHarvester = require('role.harvester');
 var roleHarvesterContainer = require('role.harvesterContainer');
 var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
+var visuals = require('visuals');
 var common = require('common');
 
 module.exports.loop = function () {
+
+    // Draw visuals (amount of energy in spawn out of total and so on)
+    visuals.drawVisuals();
 
     // Automatically spawns at least 1 screep for roles 'harvester' and 'upgrader'
     common.spawnCreeps(); // Spawning new creeps

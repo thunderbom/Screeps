@@ -6,10 +6,6 @@
  * var mod = require('common');
  * mod.thing == 'a thing'; // true
  */
-const minHarvesters = 1;
-const minContainerHarvesters = 0;
-const minUpgraders = 1;
-const minBuilders = 2;
 
 // All possible types of harvesters
 const creepHarvester = [
@@ -56,7 +52,7 @@ function spawnCreep(creepMods, creepRole)   // creepMods - array of creep builds
     var currentCreep = creepMods[0];   // Select the cheapest creep for beginning
     for (creepMod in creepMods)    // looking for all possible creeps of that type
     {
-        if (creepPrice(creepMods[creepMod]) < Game.rooms['W3N5'].energyAvailable)  // if room has enough energy, then spawn the largest creep of this type
+        if (creepPrice(creepMods[creepMod]) < Game.rooms['W72S22'].energyAvailable)  // if room has enough energy, then spawn the largest creep of this type
             currentCreep = creepMods[creepMod];
     }
     console.log('Spawning ', creepRole, ' :', currentCreep, ' with energy price: ', creepPrice(currentCreep) );
@@ -64,45 +60,12 @@ function spawnCreep(creepMods, creepRole)   // creepMods - array of creep builds
 }
 
 // Returns price of creep in energy
-function creepPrice(creepPartsArray)
+function creepPrice(creepParts)
 {
     var price = 0;
-    for (var creepPart in creepPartsArray)
+    for (var creepPart in creepParts)
     {
-        switch (creepPartsArray[creepPart].toUpperCase())
-        {
-            case 'WORK':
-                price = price + 100;
-                break;
-
-            case 'MOVE':
-                price = price + 50;
-                break;
-
-            case 'CARRY':
-                price = price + 50;
-                break;
-
-            case 'ATTACK':
-                price = price + 80;
-                break;
-
-            case 'RANGED_ATTACK':
-                price = price + 150;
-                break;
-
-            case 'HEAL':
-                price = price + 250;
-                break;
-
-            case 'CLAIM':
-                price = price + 600;
-                break;
-
-            case 'TOUGH':
-                price = price + 10;
-                break;
-        }
+        price = price + BODYPART_COST[creepParts[creepPart]];
     }
 
     return price;
@@ -123,26 +86,25 @@ function clearMemory()
 // If no containers with energy, then it looks for energy source and gathers energy from it.
 //
 module.exports.gatherEnergy = function (creep) {
-        // Finding a container
+        // Finding a container that has more energy then the creep's can carry
         var sources = creep.room.find(FIND_STRUCTURES, {
-            filter: (structure) => {
-                return (structure.structureType == STRUCTURE_CONTAINER)
-            }
+            filter: (struct) =>
+                    (struct.structureType == STRUCTURE_CONTAINER) && 
+                    (struct.store[RESOURCE_ENERGY] > creep.carryCapacity)
         });
-        
-        // If there are no containers found or container contains too few energy, then looking for sources
-        if (sources.length<1 || sources[0].store[RESOURCE_ENERGY] < creep.energyCapacityAvailable)
+
+        // If there are no containers found or container contains too few energy, then looking for energy sources
+        if (sources.length<1)
         {
             sources = creep.room.find(FIND_SOURCES);
             if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(sources[0], { visualizePathStyle: { stroke: '#ffaa00' } });
+                creep.moveTo(sources[0], { visualizePathStyle: { stroke: '#ffff00' } }); // path to energy source marked with yellow
             }
         }
-        else    // If there is container found and it contains energy
+        else    // If there is container found and it contains energy, then withdrawing energy from it
         {
-        
-            if (creep.withdraw(sources[0], RESOURCE_ENERGY, creep.energyCapacityAvailable) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(sources[0], { visualizePathStyle: { stroke: '#ffaa00' } });
+            if (creep.withdraw(sources[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(sources[0], { visualizePathStyle: { stroke: '#0000ff' } });    // path to container marked with blue
             }
         }
     }
@@ -153,25 +115,25 @@ module.exports.spawnCreeps = function ()
     if (Game.spawns['Spawn1'].spawning) // If spawner is already spawning something, then leaving this function
         return;
 
-    if (_.filter(Game.creeps, function (creep) { return creep.memory.role == 'harvester' && creep.ticksToLive > 20; }).length < minHarvesters) {
+    if (_.filter(Game.creeps, function (creep) { return creep.memory.role == 'harvester' && creep.ticksToLive > 20; }).length < Memory.vars.minHarvesters) {
         clearMemory();  // Clear memory from dead creeps
         spawnCreep(creepHarvester, 'harvester');
         return; // Not to try spawning additional creeps this turn
     }
 
-    if (_.filter(Game.creeps, function (creep) { return creep.memory.role == 'harvesterContainer' && creep.ticksToLive > 12; }).length < minContainerHarvesters) {
+    if (_.filter(Game.creeps, function (creep) { return creep.memory.role == 'harvesterContainer' && creep.ticksToLive > 12; }).length < Memory.vars.minContainerHarvesters) {
         clearMemory();
         spawnCreep(creepContainerHarvester, 'harvesterContainer');
         return;
     }
 
-    if (_.filter(Game.creeps, function (creep) { return creep.memory.role == 'upgrader' && creep.ticksToLive > 12; }).length < minUpgraders) {
+    if (_.filter(Game.creeps, function (creep) { return creep.memory.role == 'upgrader' && creep.ticksToLive > 12; }).length < Memory.vars.minUpgraders) {
         clearMemory();
         spawnCreep(creepUpgrader, 'upgrader');
         return;
     }
 
-    if (_.filter(Game.creeps, function (creep) { return creep.memory.role == 'builder' && creep.ticksToLive > 12; }).length < minBuilders) {
+    if (_.filter(Game.creeps, function (creep) { return creep.memory.role == 'builder' && creep.ticksToLive > 12; }).length < Memory.vars.minBuilders) {
         clearMemory();
         spawnCreep(creepBuilder, 'builder');
         return;

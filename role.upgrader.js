@@ -4,7 +4,6 @@ var roleUpgrader = {
 
     /** @param {Creep} creep **/
     run: function (creep) {
-        
 
         if (creep.carry.energy == creep.carryCapacity && creep.memory.harvesting) {    // Creep is full, going upgrading
             creep.memory.harvesting = false;
