@@ -86,6 +86,15 @@ function clearMemory()
 // If no containers with energy, then it looks for energy source and gathers energy from it.
 //
 module.exports.gatherEnergy = function (creep) {
+        
+        FIND_DROPPED_ENERGY
+        var sources = creep.room.find(FIND_DROPPED_ENERGY, {
+            filter: (nrg) =>
+                    (nrj.structureType == STRUCTURE_CONTAINER) && 
+                    (nrj.store[RESOURCE_ENERGY] > creep.carryCapacity)
+        });
+        
+        
         // Finding a container that has more energy then the creep's can carry
         var sources = creep.room.find(FIND_STRUCTURES, {
             filter: (struct) =>
