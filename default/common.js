@@ -87,12 +87,11 @@ function clearMemory()
 //
 module.exports.gatherEnergy = function (creep) {
         
-        FIND_DROPPED_ENERGY
-        var sources = creep.room.find(FIND_DROPPED_ENERGY, {
-            filter: (nrg) =>
-                    (nrj.structureType == STRUCTURE_CONTAINER) && 
-                    (nrj.store[RESOURCE_ENERGY] > creep.carryCapacity)
-        });
+        //var sources = creep.room.find(FIND_DROPPED_ENERGY, {
+        //    filter: (nrg) =>
+        //            (nrj.structureType == STRUCTURE_CONTAINER) && 
+        //            (nrj.store[RESOURCE_ENERGY] > creep.carryCapacity)
+        //});
         
         
         // Finding a container that has more energy then the creep's can carry
